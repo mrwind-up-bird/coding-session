@@ -66,7 +66,10 @@ class ProductController extends AbstractController
         $data = $this->serializer->decode($content, 'csv', $context);
 
         foreach ($data AS $row) {
-            $product = new Product();
+            $product = $this->productRepository->findOneByProductId($row['Produktnummer']);
+            if (!$product) {
+                $product = new Product();
+            }
             $product->setProductId($row["Produktnummer"]);
             $product->setProductName($row["Produktname"]);
             $product->setProductPrice(floatval($row["Preis"]));
