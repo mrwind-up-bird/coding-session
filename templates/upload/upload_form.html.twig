@@ -4,16 +4,12 @@
 
 {% block body %}
   <h1>Upload a CSV File</h1>
+  <hr>
   {{ form_start(form) }}
   {{ form_widget(form) }}
   <button type="submit" class="btn btn-primary">Upload</button>
+  <a href="/" class="btn btn-success">Back to Overview</a>
   {{ form_end(form) }}
-
-  {% for message in app.flashes('success') %}
-    <div class="alert alert-success">
-      {{ message }}
-    </div>
-  {% endfor %}
 
 {% endblock %}
 

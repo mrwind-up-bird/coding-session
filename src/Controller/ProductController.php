@@ -28,7 +28,10 @@ class ProductController extends AbstractController
     {
         $products = $this->productRepository->findAll();
 
-        return $this->render('products/products.html.twig', ['products' => $products]);
+        if ($products) {
+            return $this->render('products/products.html.twig', ['products' => $products]);
+        }
+        return $this->redirectToRoute('app_product_upload');
     }
 
     #[Route('/upload', name: 'app_product_upload')]
@@ -47,7 +50,7 @@ class ProductController extends AbstractController
             else {
                 $this->addFlash('error', 'Error uploading File');
             }
-            $this->redirectToRoute('app_product_upload');
+            $this->redirectToRoute('app_root');
         }
 
         return $this->render('upload/upload_form.html.twig', [
@@ -55,7 +58,7 @@ class ProductController extends AbstractController
         ]);
     }
 
-    private function createOrUpdateProducts($file)
+    private function createOrUpdateProducts(string $file) : void
     {
         $context = [
             'csv_delimiter' => self::CSV_FIELD_SEPERATOR,
@@ -67,6 +70,7 @@ class ProductController extends AbstractController
 
         foreach ($data AS $row) {
             $product = $this->productRepository->findOneByProductId($row['Produktnummer']);
+
             if (!$product) {
                 $product = new Product();
             }
@@ -74,7 +78,10 @@ class ProductController extends AbstractController
             $product->setProductName($row["Produktname"]);
             $product->setProductPrice(floatval($row["Preis"]));
             $product->setProductTaxValue(intval($row["Mwst_Prozent"]));
-            $product->setProductDescription($row["Beschreibung"]);
+
+            if (isset($row['Beschreibung'])) {
+                $product->setProductDescription($row["Beschreibung"]);
+            }
 
             $this->entityManager->persist($product);
         }
