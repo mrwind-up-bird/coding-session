@@ -23,7 +23,7 @@ class ProductController extends AbstractController
 
     }
 
-    #[Route('/', name: 'app_root')]
+    #[Route('/', name: 'app_product_index')]
     public function index(): Response
     {
         $products = $this->productRepository->findAll();
@@ -46,11 +46,11 @@ class ProductController extends AbstractController
             if ($uploadedFile && $this->isCsvFile($uploadedFile)) {
                 $this->createOrUpdateProducts($uploadedFile);
                 $this->addFlash('success', 'File successfully uploaded...');
+                return $this->redirectToRoute('app_product_index');
             }
             else {
                 $this->addFlash('error', 'Error uploading File');
             }
-            $this->redirectToRoute('app_root');
         }
 
         return $this->render('upload/upload_form.html.twig', [
@@ -76,7 +76,7 @@ class ProductController extends AbstractController
             }
             $product->setProductId($row["Produktnummer"]);
             $product->setProductName($row["Produktname"]);
-            $product->setProductPrice(floatval($row["Preis"]));
+            $product->setProductPrice(floatval(str_replace(',','.',$row["Preis"])));
             $product->setProductTaxValue(intval($row["Mwst_Prozent"]));
 
             if (isset($row['Beschreibung'])) {
@@ -94,9 +94,6 @@ class ProductController extends AbstractController
         return $file->getClientOriginalExtension() === 'csv';
     }
 
-    /**
-     * removes BOM Chars from UTF8 String.
-     */
     private function removeBomFromUtf8String(string $string): string
     {
         if (substr($string, 0, 3) == chr(hexdec('EF')).chr(hexdec('BB')).chr(hexdec('BF'))) {

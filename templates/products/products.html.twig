@@ -9,7 +9,8 @@
     <tr>
       <th scope="col">Produktnummer</th>
       <th scope="col">Produktname</th>
-      <th scope="col">Preis</th>
+      <th scope="col">Preis (inkl. MwSt)</th>
+      <th scope="col">Preis (ohne MwSt)</th>
       <th scope="col">Beschreibung</th>
     </tr>
     </thead>
@@ -19,6 +20,7 @@
       <td scope="row">{{ item.productId }}</td>
       <td>{{ item.productName }}</td>
       <td>{{ (item.productPrice + (item.productPrice * (item.productTaxValue/100)))|number_format(2,',','.') }} € (inkl. {{ item.productTaxValue }}%)</td>
+      <td>{{ item.productPrice|number_format(2,',','.') }} € </td>
       <td>{{ item.productDescription }}</td>
     </tr>
     {%  endfor %}
