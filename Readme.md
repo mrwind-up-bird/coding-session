@@ -1,8 +1,8 @@
-# 🕸️ Webnetz Coding Session 🕸
+# 🕸️ Coding Session 🕸
 
 ## Description
 
-Coding Session for an application as Developer@Webnetz. This Repository runs a Docker Container with MySQL, PHP 8.2, Symfony 6.x and NGinX.
+Coding Session for an application. This Repository runs a Docker Container with MySQL, PHP 8.2, Symfony 6.x and NGinX.
 The Task for this Session was:
 
 1. Build a simple Webapp for uploading, verifying and storing Data uploaded via .csv
